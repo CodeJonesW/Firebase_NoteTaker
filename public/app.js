@@ -54,19 +54,26 @@ auth.onAuthStateChanged(user => {
         noteDiv.hidden = false
         notesRef = db.collection('notes')
         createNote.onclick = () => {
-            // console.log("my note", noteInput.value)
-            notesRef.add({
-                uid: user.uid,
-                descripton: noteInput.value,
-                // use servertimeStamp instead of Date.now() so that date obj is consistent across all client devices
-                createdAt: serverTimestamp()
-            });
+            if (!noteInput.value) {
+                alert("Please say something Classy. You can do it.")
+            } else {
+                // console.log("my note", noteInput.value)
+                notesRef.add({
+                    uid: user.uid,
+                    descripton: noteInput.value,
+                    // use servertimeStamp instead of Date.now() so that date obj is consistent across all client devices
+                    createdAt: serverTimestamp()
+                });
+            }
+            noteInput.value = "";
         }
         unsubscribe = notesRef
             .where('uid', '==', user.uid)
             .orderBy('createdAt')
             .onSnapshot(querySnapshot => {
                 const items = querySnapshot.docs.map(doc => {
+                    // let date = doc.data().createdAt.toDate()
+
                     return `<li>${doc.data().descripton}</li>`
                 });
                 noteList.innerHTML = items.join('');
