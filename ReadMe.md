@@ -7,7 +7,7 @@ Simple application to record notes in the firestore Db. Users can log in via the
 
 * HTML
 * CSS
-* JAVASCRIPT
+* Javascript
 * Firebase
 
 ## Learning Objectives
