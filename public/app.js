@@ -55,12 +55,19 @@ auth.onAuthStateChanged(user => {
         notesRef = db.collection('notes')
         createNote.onclick = () => {
             // console.log("my note", noteInput.value)
-            notesRef.add({
-                uid: user.uid,
-                descripton: noteInput.value,
-                // use servertimeStamp instead of Date.now() so that date obj is consistent across all client devices
-                createdAt: serverTimestamp()
-            });
+            if (noteInput.value.trim() === "") {
+                alert("Please enter a note!");
+                noteInput.focus();
+                return false;
+            } else {
+                notesRef.add({
+                    uid: user.uid,
+                    descripton: noteInput.value,
+                    // use servertimeStamp instead of Date.now() so that date obj is consistent across all client devices
+                    createdAt: serverTimestamp()
+                });
+            }
+
         }
         unsubscribe = notesRef
             .where('uid', '==', user.uid)
