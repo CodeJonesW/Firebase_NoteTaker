@@ -17,16 +17,19 @@ signOutBtn.onclick = () => auth.signOut()
 
 auth.onAuthStateChanged(user => {
     if (user) {
-        console.log("user", user)
+        console.log("User: ", user)
         // signed in user's info
         whenSignedIn.hidden = false;
         whenSignedOut.hidden = true;
         signOutBtn.hidden = false
-        userDetails.innerHTML = `<h3> Hi ${user.displayName}! <p>User Id:${user.uid}</p>`;
+        userDetails.innerHTML = `<h3> Hi ${user.displayName}! <p>Please feel free to record your thoughts in this space </p>`;
+
     } else {
         whenSignedIn.hidden = true;
         whenSignedOut.hidden = false;
         userDetails.innerHTML = '';
+        noteDiv.hidden = true;
+        noteList.innerHTML = '';
     }
 });
 
@@ -51,7 +54,7 @@ auth.onAuthStateChanged(user => {
         noteDiv.hidden = false
         notesRef = db.collection('notes')
         createNote.onclick = () => {
-            console.log("my note", noteInput.value)
+            // console.log("my note", noteInput.value)
             notesRef.add({
                 uid: user.uid,
                 descripton: noteInput.value,
@@ -59,6 +62,14 @@ auth.onAuthStateChanged(user => {
                 createdAt: serverTimestamp()
             });
         }
+        unsubscribe = notesRef
+            .where('uid', '==', user.uid)
+            .onSnapshot(querySnapshot => {
+                const items = querySnapshot.docs.map(doc => {
+                    return `<li>${doc.data().descripton}</li>`
+                });
+                noteList.innerHTML = items.join('');
+            })
     }
 });
 
