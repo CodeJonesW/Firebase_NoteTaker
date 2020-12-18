@@ -54,18 +54,13 @@ auth.onAuthStateChanged(user => {
         noteDiv.hidden = false
         notesRef = db.collection('notes')
         createNote.onclick = () => {
-            if (!noteInput.value) {
-                alert("Please say something Classy. You can do it.")
-            } else {
-                // console.log("my note", noteInput.value)
-                notesRef.add({
-                    uid: user.uid,
-                    descripton: noteInput.value,
-                    // use servertimeStamp instead of Date.now() so that date obj is consistent across all client devices
-                    createdAt: serverTimestamp()
-                });
-            }
-            noteInput.value = "";
+            // console.log("my note", noteInput.value)
+            notesRef.add({
+                uid: user.uid,
+                descripton: noteInput.value,
+                // use servertimeStamp instead of Date.now() so that date obj is consistent across all client devices
+                createdAt: serverTimestamp()
+            });
         }
         unsubscribe = notesRef
             .where('uid', '==', user.uid)
