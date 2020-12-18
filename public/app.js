@@ -64,12 +64,16 @@ auth.onAuthStateChanged(user => {
         }
         unsubscribe = notesRef
             .where('uid', '==', user.uid)
+            .orderBy('createdAt')
             .onSnapshot(querySnapshot => {
                 const items = querySnapshot.docs.map(doc => {
                     return `<li>${doc.data().descripton}</li>`
                 });
                 noteList.innerHTML = items.join('');
             })
+    } else {
+
+        unsubscribe && unsubscribe();
     }
 });
 
